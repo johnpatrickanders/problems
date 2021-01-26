@@ -25,9 +25,10 @@ function createRequestQueue() {
       }
     },
     processNext() {
-      const promise = queue.shift();
+      const promise = queue[0];
       try {
-        promise.resolve();
+        console.log("attempting resolve:", Promise.resolve(promise));
+        queue.shift();
         return true;
       } catch {
         console.log("your promise had an error");
@@ -43,4 +44,8 @@ function createRequestQueue() {
 const queue = createRequestQueue();
 console.log(queue.enqueue(1, () => new Promise(() => "hi")));
 console.log(queue.enqueue(2, () => new Promise(() => "hi x 2")));
+console.log("size should be two", queue.size());
+console.log(queue.processNext());
+console.log("size should be one", queue.size());
+console.log(queue.enqueue(3, () => new Promise(() => "hi x 2")));
 console.log("size should be two", queue.size());
