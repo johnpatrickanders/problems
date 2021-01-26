@@ -6,11 +6,14 @@
 function createRequestQueue() {
   const table = {};
   const queue = [];
+  let inc = 1;
   return {
-    enqueue(id, req) {
+    enqueue(req) {
       // const promise = new Promise(req);
-      table[id] = req;
+
+      table[inc] = req;
       queue.push(req);
+      inc++;
       return req;
     },
     cancel(id) {
@@ -43,12 +46,12 @@ function createRequestQueue() {
 }
 
 const queue = createRequestQueue();
-console.log(queue.enqueue(1, () => new Promise(() => "hi")));
-console.log(queue.enqueue(2, () => new Promise(() => "hi x 2")));
+console.log("enqueue", queue.enqueue(() => new Promise(() => "hi")));
+console.log("enqueue", queue.enqueue(() => new Promise(() => "hi x 2")));
 console.log("size should be two", queue.size());
-console.log(queue.processNext());
+console.log("process next", queue.processNext());
 console.log("size should be one", queue.size());
-console.log(queue.enqueue(3, () => new Promise(() => "hi x 2")));
+console.log("enqueue", queue.enqueue(() => new Promise(() => "hi x 2")));
 console.log("size should be two", queue.size());
-console.log("should be undefined", queue.cancel(3));
+console.log("cancel (should be undefined)", queue.cancel(3));
 console.log("should be one", queue.size());
