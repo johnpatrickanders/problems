@@ -5,17 +5,17 @@
 
 function createRequestQueue() {
   const table = {};
-  const queue = [];
+  const queue = [];   // optimize to hold IDs
   return {
     enqueue(id, req) {
-      // const promise = new Promise(req);
-      table[id] = req;
-      queue.push(req);
-      return req;
+      const promise = new Promise(req);
+      table[id] = promise;
+      queue.push(promise);
+      return promise;
     },
     cancel(id) {
-      console.log(!!table[id]);
-      if (!!table[id]) {
+      // console.log(!!table[id]);
+      if (table[id]) { // NO !!
         for (let i = 0; i < queue.length; i++) {
           const promise = queue[i];
           if (promise === table[id]) {
@@ -46,7 +46,7 @@ const queue = createRequestQueue();
 console.log("enqueue", queue.enqueue(1, () => new Promise(() => "hi")));
 console.log("enqueue", queue.enqueue(2, () => new Promise(() => "hi x 2")));
 console.log("size should be two", queue.size());
-console.log("enqueue", queue.processNext());
+console.log("process next?", queue.processNext());
 console.log("size should be one", queue.size());
 console.log("enqueue", queue.enqueue(3, () => new Promise(() => "hi x 2")));
 console.log("size should be two", queue.size());

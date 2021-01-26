@@ -9,38 +9,31 @@ function createRequestQueue() {
   let inc = 1;
   return {
     enqueue(req) {
-      // const promise = new Promise(req);
+      const promise = new Promise(req);
 
-      table[inc] = req;
-      queue.push(req);
+      table[inc] = promise;
+      queue.push(inc);
       inc++;
-      return req;
+      return promise;
     },
     cancel(id) {
-      console.log(!!table[id]);
-      if (!!table[id]) {
-        for (let i = 0; i < queue.length; i++) {
-          const promise = queue[i];
-          if (promise === table[id]) {
-            queue.splice(i, 1);
-            delete table[id];
-          }
-        }
-      }
+      delete (table[id]);
     },
     processNext() {
-      const promise = queue[0];
+      const id = queue.shift();
       try {
-        console.log("attempting resolve:", Promise.resolve(promise));
+        console.log("attempting resolve:", Promise.resolve(table[id]));
         queue.shift();
+        this.cancel(id);
         return true;
       } catch {
+        // queue.unshift()
         console.log("your promise had an error");
         return false;
       }
     },
     size() {
-      return queue.length;
+      return Object.keys(table).length;
     }
   }
 }
