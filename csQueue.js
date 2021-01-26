@@ -14,11 +14,12 @@ function createRequestQueue() {
       return req;
     },
     cancel(id) {
-      if (table[id]) {
+      console.log(!!table[id]);
+      if (!!table[id]) {
         for (let i = 0; i < queue.length; i++) {
           const promise = queue[i];
           if (promise === table[id]) {
-            queue.splice(id, 1);
+            queue.splice(i, 1);
             delete table[id];
           }
         }
