@@ -40,5 +40,7 @@ function createRequestQueue() {
   }
 }
 
-const req = createRequestQueue();
-console.log(req.enqueue(1, () => new Promise(() => "hi")))
+const queue = createRequestQueue();
+console.log(queue.enqueue(1, () => new Promise(() => "hi")));
+console.log(queue.enqueue(2, () => new Promise(() => "hi x 2")));
+console.log("size should be two", queue.size());
