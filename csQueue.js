@@ -49,3 +49,5 @@ console.log(queue.processNext());
 console.log("size should be one", queue.size());
 console.log(queue.enqueue(3, () => new Promise(() => "hi x 2")));
 console.log("size should be two", queue.size());
+console.log("should be undefined", queue.cancel(3));
+console.log("should be one", queue.size());
